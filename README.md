@@ -65,7 +65,7 @@ The default entrypoint is:
 
 ```text
 Brain-Tumor-Classification/
-├── .github /workflows/
+├── .github/workflows/
 │   └── python-ci.yml          # GitHub Actions workflow (installs deps + runs tests)
 ├── Report/
 │   └── report.pdf             # Project report
@@ -213,7 +213,7 @@ python -m pytest -q
 ## CI/CD
 
 GitHub Actions workflow:
-- File: `.github /workflows/python-ci.yml`
+- File: `.github/workflows/python-ci.yml`
 - Triggered on:
   - push to `main`
   - pull requests targeting `main`
