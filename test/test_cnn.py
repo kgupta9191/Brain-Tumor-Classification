@@ -47,7 +47,7 @@ def test_tumor_dataset_returns_tensor_and_label(tmp_path):
     _make_image(image_path)
 
     df = pd.DataFrame([{"Class Path": str(image_path), "Class": "x", "Label": 2}])
-    dataset = cnn.TumorDataset(df)
+    dataset = cnn.TumorDataset(df, transform=None)
     image, label = dataset[0]
 
     assert isinstance(image, Image.Image)
@@ -68,15 +68,16 @@ def test_train_and_evaluate_metric_contracts():
     torch.manual_seed(0)
     x = torch.randn(8, 3, 8, 8)
     y = torch.randint(0, 3, (8,))
-    loader = DataLoader(TensorDataset(x, y), batch_size=4, shuffle=False)
+    train_loader = DataLoader(TensorDataset(x, y), batch_size=4, shuffle=False)
+    eval_loader = DataLoader(TensorDataset(x, y), batch_size=4, shuffle=False)
 
     model = nn.Sequential(nn.Flatten(), nn.Linear(3 * 8 * 8, 3))
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
     device = torch.device("cpu")
 
-    train_loss, train_acc = cnn.train_one_epoch(model, loader, criterion, optimizer, device)
-    eval_loss, eval_acc = cnn.evaluate(model, loader, criterion, device)
+    train_loss, train_acc = cnn.train_one_epoch(model, train_loader, criterion, optimizer, device)
+    eval_loss, eval_acc = cnn.evaluate(model, eval_loader, criterion, device)
 
     for loss in (train_loss, eval_loss):
         assert isinstance(loss, float)
