@@ -91,7 +91,8 @@ Brain-Tumor-Classification/
 2. **Map Class Labels**:
    - class names are mapped to integer labels.
 3. **Create Datasets**:
-   - `TumorDataset` loads image files and returns `(image_tensor_or_image, label_tensor)`.
+   - `TumorDataset` loads image files and returns `(image, label_tensor)`.
+   - If a transform is provided, `image` is the transformed output (typically a tensor); otherwise it is a PIL image.
 4. **Split Training Set**:
    - 80% training / 20% validation split.
 5. **Create DataLoaders**:
@@ -230,10 +231,12 @@ GitHub Actions workflow:
 
 Key hyperparameters in `src/cnn.py`:
 
-- `batch_size = 256` (global constant; loaders currently use 32)
+- Effective dataloader batch size: `32` (used by train/val/test loaders)
 - `learning_rate = 0.001`
 - `num_epochs = 20`
 - `image_size = 256`
+
+Note: a global `batch_size = 256` constant exists in the file but is not currently used by the dataloaders.
 
 Current training optimizer/scheduler:
 - Optimizer: `Adam`
